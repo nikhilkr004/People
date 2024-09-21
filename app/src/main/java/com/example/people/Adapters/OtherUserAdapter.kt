@@ -1,11 +1,13 @@
 package com.example.people.Adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.people.Activity.OtherUserActivity
+import com.example.people.Activity.ShowImageInFullPageActivity
 import com.example.people.DataClass.PostItem
 import com.example.people.R
 import com.example.people.databinding.ProfileImageItemBinding
@@ -16,6 +18,11 @@ class OtherUserAdapter(val data:List<PostItem>):RecyclerView.Adapter<OtherUserAd
             val context=binding.root.context
             Glide.with(context).load(data.postImage).placeholder(R.drawable.image).into(binding.imageView10)
 
+            binding.imageView10.setOnClickListener {
+                val  intent =Intent(context,ShowImageInFullPageActivity::class.java)
+                intent.putExtra("id",data.postID)
+                context.startActivity(intent)
+            }
         }
 
     }

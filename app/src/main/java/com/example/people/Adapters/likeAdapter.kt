@@ -1,9 +1,11 @@
 package com.example.people.Adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.people.Activity.OtherUserActivity
 import com.example.people.DataClass.Comment
 import com.example.people.DataClass.Likes
 import com.example.people.DataClass.UserData
@@ -29,6 +31,14 @@ class likeAdapter (val comment:List<Likes>): RecyclerView.Adapter<likeAdapter.Vi
                     Glide.with(context).load(data?.profileImage).into(binding.profileImage)
                     binding.name.text=data?.name
                     binding.textView18.text=data?.bio
+                    
+
+                    ///set on ltem click listner
+                    binding.main.setOnClickListener {
+                        val  intent = Intent(context, OtherUserActivity::class.java)
+                        intent.putExtra("userid",comment.user)
+                        context.startActivity(intent)
+                    }
 
 
                 }

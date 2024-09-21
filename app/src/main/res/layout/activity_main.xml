@@ -12,17 +12,16 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:id="@+id/nav_var"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="@dimen/_50sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="@dimen/_15sdp"
-        android:background="@drawable/bottom_navigition_back"
+        android:background="@drawable/background_bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="@dimen/_4sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu"
         android:paddingStart="@dimen/_5sdp"
         android:paddingEnd="@dimen/_5sdp"
-        app:itemRippleColor="#00BCD4"
         app:labelVisibilityMode="unlabeled"
         />
 

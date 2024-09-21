@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
                     val data =Snapsht.getValue(PostItem::class.java)
                     if (data!=null) {
                         postData.add(data!!)
+                        postData.reverse()
                         binding.shimer.visibility=View.GONE
                         binding.homeRecyclerview.visibility=View.VISIBLE
                     }
