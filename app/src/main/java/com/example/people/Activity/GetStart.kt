@@ -17,9 +17,11 @@ class GetStart : AppCompatActivity() {
         setContentView(binding.root)
         if (FirebaseAuth.getInstance().currentUser !=null){
             startActivity(Intent(this,MainActivity::class.java))
+            finish()
         }
         binding.textView7.setOnClickListener {
             startActivity(Intent(this@GetStart,SignUpActivity::class.java))
+
         }
         binding.textView8.setOnClickListener {
             startActivity(Intent(this@GetStart,SignInActivity::class.java))

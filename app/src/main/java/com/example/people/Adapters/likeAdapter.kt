@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.people.Activity.OtherUserActivity
-import com.example.people.DataClass.Comment
 import com.example.people.DataClass.Likes
 import com.example.people.DataClass.UserData
-import com.example.people.databinding.CommentShowItemBinding
 import com.example.people.databinding.LikeItemBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,9 +29,9 @@ class likeAdapter (val comment:List<Likes>): RecyclerView.Adapter<likeAdapter.Vi
                     Glide.with(context).load(data?.profileImage).into(binding.profileImage)
                     binding.name.text=data?.name
                     binding.textView18.text=data?.bio
-                    
 
-                    ///set on ltem click listner
+
+                    ///set on item click listener
                     binding.main.setOnClickListener {
                         val  intent = Intent(context, OtherUserActivity::class.java)
                         intent.putExtra("userid",comment.user)

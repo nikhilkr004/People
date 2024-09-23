@@ -235,6 +235,9 @@ class ShowImageInFullPageActivity : AppCompatActivity() {
                         Glide.with(this@ShowImageInFullPageActivity).load(data.postImage)
                             .placeholder(R.drawable.image).into(binding.postImage)
 
+                        binding.time.text=data.time
+
+
                         getPostUserInfo(data.userID)
 
                         // deleting an item

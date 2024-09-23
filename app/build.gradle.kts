@@ -69,6 +69,7 @@ dependencies {
     implementation ("com.github.marlonlom:timeago:4.0.3")
 
     //gsm
-    implementation ("com.google.android.gms:play-services-tasks:18.0.2")
+    implementation ("com.google.android.gms:play-services-tasks:18.2.0")
+
 
 }

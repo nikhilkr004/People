@@ -1,9 +1,7 @@
 package com.example.people.Fragment
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,12 +12,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.people.Activity.GetStart
@@ -31,12 +26,14 @@ import com.example.people.R
 import com.example.people.databinding.FragmentProfileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.BuildConfig
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 
 
 class ProfileFragment : Fragment() {
@@ -45,9 +42,7 @@ class ProfileFragment : Fragment() {
     private lateinit var databaseReference: DatabaseReference
     private val PIC_IMAGE_REQ = 1
     private var imageUri: Uri? = null
-    private var isReadPermission = false
-    private var isRecordAudio = false
-    private lateinit var permissionlauncher: ActivityResultLauncher<Array<String>>
+    private var APPLICATION_ID="com.example.people"
     private val userImage = mutableListOf<PostItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +71,7 @@ class ProfileFragment : Fragment() {
 
         //// loadprifile data
         prfileData()
+
 
         setToolBarColor()
         binding.editprofile.setOnClickListener {
@@ -276,6 +272,8 @@ class ProfileFragment : Fragment() {
     }
 
 
+
+
     private fun prfileData() {
         val ref = databaseReference.child("user").child(Utils.currentUserId())
         ref.addValueEventListener(object : ValueEventListener {
@@ -286,7 +284,7 @@ class ProfileFragment : Fragment() {
 
                     binding.name.text = data.name
 
-                    if (data.bio == "") {
+                    if (data.bio.equals("")) {
                         binding.bio.text =
                             "There’s just one life – live it your way before your time comes"
                     } else {
