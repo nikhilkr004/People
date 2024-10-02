@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/seenusernumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        android:textSize="19dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider7" />
+
+    <ImageView
+        android:id="@+id/delete_story"
+        android:layout_width="31dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider7"
+        app:srcCompat="@drawable/baseline_delete_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/story_like_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="499dp"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26"
+        tools:listitem="@layout/story_like_item"
+        />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+
+            <include layout="@layout/story_like_item_shimmer" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Viewers"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seenusernumber" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="100dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="16dp"
+        android:background="#695A5A"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

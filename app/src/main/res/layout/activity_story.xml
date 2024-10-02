@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".Activity.StoryActivity">
+    <ImageView
+        android:id="@+id/image_story"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/image" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/reverse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="0dp"
+            android:id="@+id/skip"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <jp.shts.android.storiesprogressview.StoriesProgressView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="top"
+        android:id="@+id/stories_progress"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/story_profileImage"
+            android:src="@drawable/user"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/storyUsername"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="user name "
+            android:layout_toEndOf="@id/story_profileImage"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8sp"/>
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_seen"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="4dp"
+        android:layout_margin="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="seen by"
+            android:textColor="@color/black" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:id="@+id/seen_number"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/black"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/story_delete"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/white"
+        android:text="Delete"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_gravity="center"/>
+
+</RelativeLayout>

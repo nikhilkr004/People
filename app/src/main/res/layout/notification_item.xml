@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/_8sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/notifiction_profile_image"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/user"
+        app:civ_border_color="#FF000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_toStartOf="@id/notification_post_image"
+        android:layout_toEndOf="@id/notifiction_profile_image"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/udername_notification"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment_notification"
+            />
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/notification_post_image"
+        />
+</RelativeLayout>

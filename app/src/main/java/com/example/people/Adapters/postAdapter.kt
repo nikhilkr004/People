@@ -159,6 +159,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                                         .child("Followers").child(it1.toString())
                                         .setValue(true).addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
+                                                addFollowNotification(data.userID,data.postID)
                                                 Toast.makeText(
                                                     context,
                                                     "Following successful...",
@@ -301,7 +302,11 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                 FirebaseDatabase.getInstance().reference.child("Likes")
                     .child(data.postID!!)
                     .child(Utils.currentUserId())
-                    .setValue(LikeData)
+                    .setValue(LikeData).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            addLikeNotification(data.userID,data.postID)
+                        }
+                    }
             } else {
                 FirebaseDatabase.getInstance().reference.child("Likes")
                     .child(data.postID!!)
@@ -362,7 +367,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                 Utils.showDialog(context, "posting comment")
 
 
-                val ActualCumment = comment.text.toString()
+                var ActualCumment = comment.text.toString()
                 comment.setText("")
 
 
@@ -377,6 +382,8 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
 
                     commentsRef.child(it).setValue(newComment)
                         .addOnSuccessListener {
+                            addCommentNotification(data.userID,data.postID,ActualCumment)
+
                             val newcomment = data.comment + 1
                             data.comment = newcomment
                             val ref = FirebaseDatabase.getInstance().reference
@@ -384,6 +391,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                                 .setValue(newcomment).addOnCompleteListener {
                                     if (it.isSuccessful) {
                                         Utils.hideDialog()
+
                                     }
                                 }
 
@@ -435,6 +443,54 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
             dialog.setCancelable(true)
             dialog.setContentView(view)
             dialog.show()
+        }
+
+        private fun addCommentNotification(userID: String?, postID: String?, actualCumment: String) {
+            val notiRef=FirebaseDatabase.getInstance().reference
+                .child("Notification")
+                .child(userID!!)
+
+            val notiMap=HashMap<String,Any>()
+            notiMap["userid"]=Utils.currentUserId()
+            notiMap["text"]="comment on your post"
+            notiMap["postid"]=postID!!
+            notiMap["sign"]=actualCumment
+            notiMap["ispost"]=true
+
+
+            notiRef.push().setValue(notiMap)
+
+        }
+        private fun addLikeNotification(userID: String?,postID: String?){
+            val notiRef=FirebaseDatabase.getInstance().reference
+                .child("Notification")
+                .child(userID!!)
+
+            val notiMap=HashMap<String,Any>()
+            notiMap["userid"]=Utils.currentUserId()
+            notiMap["text"]="like your post"
+            notiMap["postid"]=postID!!
+            notiMap["sign"]=""
+            notiMap["ispost"]=true
+
+
+            notiRef.push().setValue(notiMap)
+        }
+
+        private fun addFollowNotification(userID: String?,postID: String?){
+            val notiRef=FirebaseDatabase.getInstance().reference
+                .child("Notification")
+                .child(userID!!)
+
+            val notiMap=HashMap<String,Any>()
+            notiMap["userid"]=Utils.currentUserId()
+            notiMap["text"]="start following you"
+            notiMap["postid"]=userID
+            notiMap["sign"]=""
+            notiMap["ispost"]=true
+
+
+            notiRef.push().setValue(notiMap)
         }
 
         private fun getUSerProfile(context: Context) {
@@ -493,4 +549,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
         val data = data[position]
         holder.bind(data)
     }
+
+
+
 }

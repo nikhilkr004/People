@@ -48,8 +48,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.firebase:firebase-storage:21.0.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.activity:activity:1.9.2")
     testImplementation("junit:junit:4.13.2")
@@ -70,6 +70,10 @@ dependencies {
 
     //gsm
     implementation ("com.google.android.gms:play-services-tasks:18.2.0")
+
+    //story progress view
+    
+        implementation ("com.github.shts:StoriesProgressView:3.0.0")
 
 
 }

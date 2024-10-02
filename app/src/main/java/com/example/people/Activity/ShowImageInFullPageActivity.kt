@@ -22,6 +22,7 @@ import com.example.people.DataClass.PostItem
 import com.example.people.DataClass.UserData
 import com.example.people.R
 import com.example.people.databinding.ActivityShowImageInFullPageBinding
+import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -235,7 +236,7 @@ class ShowImageInFullPageActivity : AppCompatActivity() {
                         Glide.with(this@ShowImageInFullPageActivity).load(data.postImage)
                             .placeholder(R.drawable.image).into(binding.postImage)
 
-                        binding.time.text=data.time
+                        binding.time.text= TimeAgo.using(data.time!!.toLong())
 
 
                         getPostUserInfo(data.userID)

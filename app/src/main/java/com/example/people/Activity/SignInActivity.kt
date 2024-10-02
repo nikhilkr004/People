@@ -22,11 +22,9 @@ class SignInActivity : AppCompatActivity() {
         binding.signUpBtn.setOnClickListener {
             signIn()
         }
-
     }
 
     private fun signIn() {
-
         val email =binding.email.text.toString()
         val password =binding.password.text.toString()
 
