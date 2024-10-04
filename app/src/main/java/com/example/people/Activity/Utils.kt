@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
 
 object Utils {
 
@@ -53,5 +55,17 @@ private var dialog:AlertDialog?=null
         } else {
             null
         }
+    }
+
+    fun getTime(): String {
+
+
+        val formatter = SimpleDateFormat("HH:mm:ss")
+        val date: Date = Date(System.currentTimeMillis())
+        val stringdate = formatter.format(date)
+
+
+        return stringdate
+
     }
 }

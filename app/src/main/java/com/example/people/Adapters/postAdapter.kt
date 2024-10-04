@@ -2,6 +2,7 @@ package com.example.people.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.people.Activity.Utils
+import com.example.people.Chat.ChatPageActivity
 import com.example.people.DataClass.Comment
 import com.example.people.DataClass.Likes
 import com.example.people.DataClass.PostItem
@@ -46,6 +48,16 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                 .into(binding.postImage)
             binding.time.text = TimeAgo.using(data.time!!.toLong())
             binding.title.text = data.title.toString()
+
+
+            binding.profileImage.setOnClickListener {
+                val intent=Intent(context,ChatPageActivity::class.java)
+                intent.putExtra("name",data.name)
+                intent.putExtra("uid",data.userID)
+                intent.putExtra("img",data.image)
+                context.startActivity(intent)
+            }
+
 
             val ref=databaseReference.child("user").child(data.userID!!)
             ref.addValueEventListener(object : ValueEventListener {

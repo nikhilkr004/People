@@ -1,5 +1,6 @@
 package com.example.people.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import com.bumptech.glide.util.Util
 import com.example.people.Activity.Utils
 import com.example.people.Adapters.StoryAdapter
 import com.example.people.Adapters.postAdapter
+import com.example.people.Chat.ChatHomeActivity
 import com.example.people.DataClass.PostItem
 import com.example.people.DataClass.Story
 import com.example.people.R
@@ -50,6 +52,11 @@ class HomeFragment : Fragment() {
         val daapter = postAdapter(postData)
 
         val ref = databaseReference.child("post")
+
+
+        binding.imageView6.setOnClickListener {
+            startActivity(Intent(requireContext(),ChatHomeActivity::class.java))
+        }
 
 
         ref.addValueEventListener(object : ValueEventListener {
@@ -94,8 +101,6 @@ class HomeFragment : Fragment() {
                                 (followingList as ArrayList<String>).add(it!!)
 
                             }
-
-
                         }
                         retriveStorys()
                     }
@@ -123,23 +128,6 @@ class HomeFragment : Fragment() {
         storyRecyclerviw.adapter = storyAdapter
 
         storyAdapter!!.notifyDataSetChanged()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         return binding.root
     }

@@ -17,6 +17,12 @@
         android:theme="@style/Theme.People"
         tools:targetApi="31">
         <activity
+            android:name=".Chat.ChatPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Chat.ChatHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.StoryActivity"
             android:exported="false" />
         <activity
