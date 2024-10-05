@@ -66,7 +66,8 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                         val info=snapshot.getValue(UserData::class.java)
                         if (info!=null){
                             binding.name.text = info.name.toString()
-                            Glide.with(context).load(info.profileImage).placeholder(R.drawable.user)
+                            Glide.with(context).load(info.profileImage
+                            ).placeholder(R.drawable.user)
                                 .into(binding.profileImage)
                         }
                     }

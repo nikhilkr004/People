@@ -115,6 +115,7 @@ class ShowImageInFullPageActivity : AppCompatActivity() {
                     val frist = snapshot.children.iterator().next()
                     val dataa = frist.getValue(Comment::class.java)
 
+
                     if (dataa?.comment!!.equals(0)) {
                         binding.textView14.visibility = View.GONE
 
@@ -239,6 +240,7 @@ class ShowImageInFullPageActivity : AppCompatActivity() {
                         binding.time.text= TimeAgo.using(data.time!!.toLong())
 
 
+                        binding.title.text = data.title.toString()
                         getPostUserInfo(data.userID)
 
                         // deleting an item
@@ -309,6 +311,8 @@ class ShowImageInFullPageActivity : AppCompatActivity() {
                     val info = snapshot.getValue(UserData::class.java)
                     if (info != null) {
                         name = info.name.toString()
+                        Glide.with(this@ShowImageInFullPageActivity).load(info.profileImage)
+                            .placeholder(R.drawable.user).into(binding.currentUsreProfile)
                         setImageWhenLikeClick(info.name, info.profileImage, data)
                     }
                 }

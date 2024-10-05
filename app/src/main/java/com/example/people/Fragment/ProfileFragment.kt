@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.example.people.Activity.GetStart
 import com.example.people.Activity.Utils
 import com.example.people.Adapters.OtherUserAdapter
+import com.example.people.DataClass.NotesData
 import com.example.people.DataClass.PostItem
 import com.example.people.DataClass.UserData
 import com.example.people.R
@@ -60,6 +61,11 @@ class ProfileFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         databaseReference = FirebaseDatabase.getInstance().reference
 
+
+        /// add notes
+        binding.profileImage.setOnClickListener{
+            UploadNotes()
+        }
         ///sign Out
         binding.imageView8.setOnClickListener {
             FirebaseAuth.getInstance().signOut();
@@ -299,6 +305,7 @@ class ProfileFragment : Fragment() {
                     binding.profileShimmer.visibility = View.GONE
                     binding.mainLayout.visibility = View.VISIBLE
 
+
                 }
             }
 
@@ -306,6 +313,69 @@ class ProfileFragment : Fragment() {
 
             }
         })
+    }
+
+
+    private fun UploadNotes(){
+        val dialog=BottomSheetDialog(requireContext())
+        val view= LayoutInflater.from(context).inflate(R.layout.add_notes_item,null)
+
+        val  notes=view.findViewById<EditText>(R.id.notesText)
+        val time=System.currentTimeMillis()
+        val upload=view.findViewById<TextView>(R.id.textView19)
+
+
+        val ref= FirebaseDatabase.getInstance().reference.child("user").child(Utils.currentUserId())
+
+
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (Snapshot in snapshot.children){
+                    val user=Snapshot.getValue(UserData::class.java)
+                    if (user!=null) {
+                        val notesData = NotesData(
+                            name = user!!.name.toString(),
+                            userId = Utils.currentUserId(),
+                            userImage = user.profileImage,
+                            notes = notes.text.toString(),
+                            time = time.toString()
+                        )
+
+
+                        val dataRef = FirebaseDatabase.getInstance().reference.child("Notes")
+                            .child(Utils.currentUserId()).push()
+
+                        upload.setOnClickListener {
+
+                            dataRef.setValue(notesData).addOnCompleteListener {
+                                if (it.isSuccessful)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Notes add successful",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                            }
+
+                        }
+
+
+                    }
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
+        dialog.setCancelable(true)
+
+
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -318,3 +388,4 @@ class ProfileFragment : Fragment() {
     }
 
 }
+
