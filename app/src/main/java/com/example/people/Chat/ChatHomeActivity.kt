@@ -13,6 +13,7 @@ import com.arthurivanets.adapster.listeners.OnItemClickListener
 import com.example.people.Activity.Utils
 import com.example.people.Adapters.StoryAdapter
 import com.example.people.Adapters.UserAndNotesAdapter
+import com.example.people.DataClass.NotesData
 import com.example.people.DataClass.RecentChat
 import com.example.people.DataClass.Story
 import com.example.people.DataClass.UserData
@@ -49,6 +50,10 @@ class ChatHomeActivity : AppCompatActivity()  {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.imageView11.setOnClickListener { finish() }
+
+
         followingList = ArrayList()
 
         getFollowingUser()
@@ -87,10 +92,10 @@ class ChatHomeActivity : AppCompatActivity()  {
 
 
         val followingRef = FirebaseDatabase.getInstance().getReference("Follow").child(Utils.currentUserId()).child("Following")
-        val usersRef = FirebaseDatabase.getInstance().getReference("user")
+        val usersRef = FirebaseDatabase.getInstance().getReference("Notes")
 
 // List to hold the followed users' data
-        val followedUsersList = mutableListOf<UserData>()
+        val followedUsersList = mutableListOf<NotesData>()
 
 
         val recyclerView=binding.allUserRecyclerview
@@ -108,7 +113,7 @@ class ChatHomeActivity : AppCompatActivity()  {
                     // Fetch user details for each followed user
                     usersRef.child(followedUserId!!).addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(userSnapshot: DataSnapshot) {
-                            val user = userSnapshot.getValue(UserData::class.java)
+                            val user = userSnapshot.getValue(NotesData::class.java)
                             if (user != null) {
                                 followedUsersList.add(user)
                             }
@@ -135,37 +140,6 @@ class ChatHomeActivity : AppCompatActivity()  {
 
     }
 
- private   fun  GetUSerData() {
-
-     val recyclerView=binding.allUserRecyclerview
-     recyclerView.layoutManager=LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-     val adapters=UserAndNotesAdapter(FollowUserList as ArrayList<UserData>)
-     recyclerView.adapter=adapters
-
-     val ref=FirebaseDatabase.getInstance().reference.child("user")
-     ref.addValueEventListener(object : ValueEventListener {
-         override fun onDataChange(snapshot: DataSnapshot) {
-         FollowUserList.clear()
-
-             for (id in followingList!!){
-
-                 for (Snapshot in snapshot.child(id).children){
-                     val data=Snapshot.getValue(UserData::class.java)
-                     if (data!=null){
-                      FollowUserList.add(data)
-                     }
-                 }
-                 adapters.notifyDataSetChanged()
-             }
-
-         }
-
-         override fun onCancelled(error: DatabaseError) {
-             TODO("Not yet implemented")
-         }
-     })
-
-    }
 
 }
 

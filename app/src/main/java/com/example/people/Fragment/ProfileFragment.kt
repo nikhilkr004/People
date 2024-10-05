@@ -14,7 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.people.Activity.GetStart
@@ -27,14 +26,12 @@ import com.example.people.R
 import com.example.people.databinding.FragmentProfileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.BuildConfig
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import java.io.File
 
 
 class ProfileFragment : Fragment() {
@@ -63,9 +60,13 @@ class ProfileFragment : Fragment() {
 
 
         /// add notes
-        binding.profileImage.setOnClickListener{
+        binding.noteCardView.setOnClickListener{
             UploadNotes()
         }
+
+        //show notes
+        showNotes()
+
         ///sign Out
         binding.imageView8.setOnClickListener {
             FirebaseAuth.getInstance().signOut();
@@ -132,6 +133,24 @@ class ProfileFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun showNotes() {
+        val ref=databaseReference.child("Notes").child(Utils.currentUserId())
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                    val notes=snapshot.getValue(NotesData::class.java)
+                    if (notes!=null){
+                        binding.noteTextView.text=notes.notes.toString()
+                    }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 
@@ -324,51 +343,39 @@ class ProfileFragment : Fragment() {
         val time=System.currentTimeMillis()
         val upload=view.findViewById<TextView>(R.id.textView19)
 
+        upload.setOnClickListener {
+            Utils.showDialog(requireContext(),"notes adding")
 
-        val ref= FirebaseDatabase.getInstance().reference.child("user").child(Utils.currentUserId())
+            Utils.fetchUserData(Utils.currentUserId()){
+                user->
+                val notes1=notes.text.toString()
 
+                if (notes1 == ""){
+                    notes.setError("write note first")
+                    Utils.hideDialog()
+                }
+                else{
+                    val notesData=NotesData(
+                        userId = Utils.currentUserId(),
+                        notes = notes.text.toString(),
+                        name = user!!.name.toString(),
+                        userImage = user.profileImage,
+                        time = time.toString()
+                    )
 
+                    val ref=FirebaseDatabase.getInstance().reference.child("Notes").child(Utils.currentUserId())
 
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (Snapshot in snapshot.children){
-                    val user=Snapshot.getValue(UserData::class.java)
-                    if (user!=null) {
-                        val notesData = NotesData(
-                            name = user!!.name.toString(),
-                            userId = Utils.currentUserId(),
-                            userImage = user.profileImage,
-                            notes = notes.text.toString(),
-                            time = time.toString()
-                        )
-
-
-                        val dataRef = FirebaseDatabase.getInstance().reference.child("Notes")
-                            .child(Utils.currentUserId()).push()
-
-                        upload.setOnClickListener {
-
-                            dataRef.setValue(notesData).addOnCompleteListener {
-                                if (it.isSuccessful)
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Notes add successful",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                            }
-
+                    ref.setValue(notesData).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            Toast.makeText(requireContext(), "notes added successful", Toast.LENGTH_SHORT).show()
+                            Utils.hideDialog()
+                            dialog.dismiss()
                         }
-
-
                     }
-
                 }
             }
+        }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
 
         dialog.setCancelable(true)
 
@@ -377,6 +384,8 @@ class ProfileFragment : Fragment() {
         dialog.setContentView(view)
         dialog.show()
     }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

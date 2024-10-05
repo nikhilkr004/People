@@ -41,7 +41,6 @@ class SignInActivity : AppCompatActivity() {
                 }
 
                 else{
-                    Utils.hideDialog()
                     Toast.makeText(this, it.exception!!.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }

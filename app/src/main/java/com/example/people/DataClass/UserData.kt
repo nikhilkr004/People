@@ -10,9 +10,11 @@ data class UserData(
     var bio:String?=null,
     var userId:String?=null,
     var profileImage:String?=null,
-    var professon:String?=null
-): Parcelable{
+    var professon:String?=null,
+    var password:String?=null
+): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -31,6 +33,7 @@ data class UserData(
         parcel.writeString(userId)
         parcel.writeString(profileImage)
         parcel.writeString(professon)
+        parcel.writeString(password)
     }
 
     override fun describeContents(): Int {
@@ -46,5 +49,4 @@ data class UserData(
             return arrayOfNulls(size)
         }
     }
-
 }

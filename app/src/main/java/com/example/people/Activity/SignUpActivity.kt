@@ -79,7 +79,8 @@ class SignUpActivity : AppCompatActivity() {
                             name = name,
                             email = email,
                             userId = UserID,
-                            userName = userName
+                            userName = userName,
+                            password = password
                         )
 
                         val ref = refrence.child("user").child(UserID)

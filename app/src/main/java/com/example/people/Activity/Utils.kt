@@ -1,5 +1,6 @@
 package com.example.people.Activity
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -68,4 +70,28 @@ private var dialog:AlertDialog?=null
         return stringdate
 
     }
+
+
+    fun fetchUserData(userId: String, callback:(UserData?) -> Unit) {
+        // Get reference to Firebase Realtime Database
+        val databaseReference = FirebaseDatabase.getInstance().getReference("user")
+
+        // Query the database to fetch the user with the given userId
+        databaseReference.child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                // If the snapshot exists, map the data to a User object
+                if (snapshot.exists()) {
+                    val user = snapshot.getValue(UserData::class.java)
+                    // Pass the user data to the callback
+                    callback(user)
+                } else {
+                    // If no data found for the given userId, return null
+                    callback(null)
+                }
+            }
+            .addOnFailureListener {
+                callback(null)
+            }
+    }
+
 }

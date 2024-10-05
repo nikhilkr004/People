@@ -23,23 +23,51 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
 
-            android:layout_width="match_parent"
             android:id="@+id/mainLayout"
-            android:layout_height="match_parent"
-         >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:src="@drawable/user"
                 app:civ_border_color="@color/blue"
                 app:civ_border_width="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/noteCardView"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_34sdp"
+                app:cardBackgroundColor="@color/blue"
+                app:cardCornerRadius="@dimen/_14sdp"
+                app:layout_constraintBottom_toTopOf="@+id/profile_image"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toStartOf="@+id/profile_image"
+                app:layout_constraintTop_toTopOf="@+id/profile_image">
+
+
+                <!-- Note Text inside the CardView -->
+                <TextView
+                    android:id="@+id/noteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/cherry_cream_soda"
+                    android:maxLines="3"
+                    android:padding="3dp"
+                    android:text="Notes??"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="italic" />
+
+            </androidx.cardview.widget.CardView>
             <TextView
                 android:id="@+id/name"
                 android:layout_width="0dp"
@@ -185,8 +213,8 @@
                 android:id="@+id/imageView8"
                 android:layout_width="36dp"
                 android:layout_height="32dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="8dp"
                 android:src="@drawable/shutdown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
