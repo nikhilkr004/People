@@ -22,6 +22,9 @@ import java.util.Date
 
 object Utils {
 
+    val APPID:Long=1134852515
+    val APP_SIGN="895c38ead943000526a8a6fc1ba415182cf5bc3c4ead657dfa5b9c60335afbc3"
+
 private var dialog:AlertDialog?=null
     private val auth=FirebaseAuth.getInstance()
 

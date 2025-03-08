@@ -226,6 +226,7 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
         dialog.setCancelable(true)
 
         dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun getStories(userId: String) {

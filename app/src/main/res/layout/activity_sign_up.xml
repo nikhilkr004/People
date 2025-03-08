@@ -93,7 +93,7 @@
             android:background="@drawable/edit_text_back"
             android:drawableStart="@drawable/padlock"
             android:drawablePadding="@dimen/_10sdp"
-            android:hint="Name"
+            android:hint="Pssword"
             android:inputType="textVisiblePassword"
             android:padding="@dimen/_14sdp"
             android:paddingStart="@dimen/_10sdp" />

@@ -20,6 +20,9 @@ import com.example.people.DataClass.Likes
 import com.example.people.DataClass.PostItem
 import com.example.people.DataClass.UserData
 import com.example.people.MainActivity
+import com.example.people.Notification.Data
+import com.example.people.Notification.Sender
+import com.example.people.Notification.Token
 import com.example.people.R
 import com.example.people.databinding.HomeItemBinding
 import com.github.marlonlom.utilities.timeago.TimeAgo
@@ -41,6 +44,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
         private var userImage: String? = null
         val commentsList = mutableListOf<Comment>()
         var doubleClick: Boolean? = false
+        var notify=false
         fun bind(data: PostItem) {
             val context = binding.root.context
 
@@ -59,17 +63,21 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
             }
 
 
+            
+
             val ref=databaseReference.child("user").child(data.userID!!)
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()){
                         val info=snapshot.getValue(UserData::class.java)
-                        if (info!=null){
+                        if (info!=null) {
                             binding.name.text = info.name.toString()
-                            Glide.with(context).load(info.profileImage
+                            Glide.with(context).load(
+                                info.profileImage
                             ).placeholder(R.drawable.user)
                                 .into(binding.profileImage)
                         }
+
                     }
                 }
 
@@ -318,6 +326,7 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                     .setValue(LikeData).addOnCompleteListener {
                         if (it.isSuccessful){
                             addLikeNotification(data.userID,data.postID)
+                            notify=true
                         }
                     }
             } else {
@@ -413,6 +422,9 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
                         .addOnFailureListener {
                             // Handle failure
                         }
+
+
+
                 }
 
 
@@ -485,9 +497,56 @@ class postAdapter(val data: List<PostItem>) : RecyclerView.Adapter<postAdapter.V
             notiMap["postid"]=postID!!
             notiMap["sign"]=""
             notiMap["ispost"]=true
-
-
             notiRef.push().setValue(notiMap)
+
+
+
+            ////implement push notification
+            val refrence=FirebaseDatabase.getInstance().reference
+                .child("user").child(Utils.currentUserId())
+
+            refrence.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user=snapshot.getValue(UserData::class.java)
+
+                    if (notify){
+                        sendNotificatin(userID,user!!.name,)
+                    }
+                    notify=false
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+
+
+        }
+
+        private fun sendNotificatin(userID: String, name: String?) {
+            val ref=FirebaseDatabase.getInstance().reference.child("Token")
+
+            val query=ref.orderByKey().equalTo(userID)
+            query.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (snapshot in snapshot.children){
+                        val token:Token?=snapshot.getValue(Token::class.java)
+                        var data=Data(Utils.currentUserId(),
+                            R.mipmap.ic_launcher,
+                            "$name: Like your post",
+                            "New Message",
+                            userID
+                            )
+
+                        val sender=Sender(data,token!!.getToken().toString())
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
         }
 
         private fun addFollowNotification(userID: String?,postID: String?){

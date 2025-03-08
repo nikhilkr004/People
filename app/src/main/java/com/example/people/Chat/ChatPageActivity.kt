@@ -1,5 +1,6 @@
 package com.example.people.Chat
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.people.Activity.Utils
 import com.example.people.DataClass.messageModel
 import com.example.people.R
+import com.example.people.VideoClass.VideoCallActivity
 import com.example.people.databinding.ActivityChatPageBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -19,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallConfig
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService
+import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig
 
 class ChatPageActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -47,6 +52,26 @@ class ChatPageActivity : AppCompatActivity() {
         val uid = intent.getStringExtra("uid").toString()
         val profileimg = intent.getStringExtra("img").toString()
         binding.name.text = name.toString()
+
+
+        val callinInvitation = ZegoUIKitPrebuiltCallInvitationConfig()
+
+        ZegoUIKitPrebuiltCallService.init(
+            application,
+            Utils.APPID,
+            Utils.APP_SIGN,
+            Utils.currentUserId(),
+            Utils.currentUserId(),
+            callinInvitation
+        )
+
+        binding.profile.setOnClickListener {
+            val intent = Intent(this, VideoCallActivity::class.java).apply {
+                putExtra("userId", uid)
+                putExtra("userName", name)
+            }
+            startActivity(intent)
+        }
 
         Glide.with(this@ChatPageActivity).load(profileimg).into(binding.profile)
 
@@ -102,7 +127,7 @@ class ChatPageActivity : AppCompatActivity() {
                 .push().setValue(messageObject).addOnSuccessListener {
                     databaseReference.child("Chats").child(reciverRoom!!).child("messages")
                         .push().setValue(messageObject).addOnSuccessListener {
-                            val sethasmap= hashMapOf<String,Any>(
+                            val sethasmap = hashMapOf<String, Any>(
                                 "friendid" to uid,
                                 "time" to Utils.getTime(),
                                 "sender" to Utils.currentUserId(),
@@ -112,10 +137,12 @@ class ChatPageActivity : AppCompatActivity() {
                                 "person" to "you"
                             )
 
-                            firestore.collection("Conversation${Utils.currentUserId()}").document(uid)
+                            firestore.collection("Conversation${Utils.currentUserId()}")
+                                .document(uid)
                                 .set(sethasmap)
 
-                            firestore.collection("Conversation${uid}").document(Utils.currentUserId())
+                            firestore.collection("Conversation${uid}")
+                                .document(Utils.currentUserId())
                                 .update(
                                     "message",
                                     message,

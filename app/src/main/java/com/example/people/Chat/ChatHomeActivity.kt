@@ -3,19 +3,15 @@ package com.example.people.Chat
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arthurivanets.adapster.listeners.OnItemClickListener
 import com.example.people.Activity.Utils
-import com.example.people.Adapters.StoryAdapter
 import com.example.people.Adapters.UserAndNotesAdapter
 import com.example.people.DataClass.NotesData
 import com.example.people.DataClass.RecentChat
-import com.example.people.DataClass.Story
 import com.example.people.DataClass.UserData
 import com.example.people.R
 import com.example.people.databinding.ActivityChatHomeBinding
@@ -24,8 +20,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.remote.WatchChange
+
 
 class ChatHomeActivity : AppCompatActivity()  {
     private  val binding by lazy {
@@ -60,29 +58,41 @@ class ChatHomeActivity : AppCompatActivity()  {
 
 
 
-        val recyclerView=binding.chatrecycler
-        recyclerView.layoutManager=LinearLayoutManager(this)
+        val recyclerView = binding.chatrecycler
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        recentadapter=chatUserAdapter()
+        recentadapter = chatUserAdapter()
+        recyclerView.adapter = recentadapter
 
-        recentadapter.setList(userdata)
-        recyclerView.adapter=recentadapter
-
-
-
-        firestore.collection("Conversation${Utils.currentUserId()}").orderBy("time",com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .get().addOnSuccessListener {
-
-                query->
-                for (document in query){
-                    val post =document.toObject(RecentChat::class.java)
-                    if (post.sender!!.equals(Utils.currentUserId())) userdata.add(post)
-                    recentadapter.notifyDataSetChanged()
+// Add a real-time listener to the Firestore collection
+        firestore.collection("Conversation${Utils.currentUserId()}")
+            .orderBy("time", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    // Handle the error
+                    Log.e("FirestoreError", "Error fetching data: ${error.message}")
+                    return@addSnapshotListener
                 }
 
-
+                if (querySnapshot != null) {
+                    for (documentChange in querySnapshot.documentChanges) {
+                        val post = documentChange.document.toObject(RecentChat::class.java)
+                        when (documentChange.type) {
+                            DocumentChange.Type.ADDED -> {
+                                // Add new item to the adapter
+                                recentadapter.addItem(post)
+                            }
+                            DocumentChange.Type.MODIFIED -> {
+                                // Update existing item in the adapter
+                                recentadapter.updateItem(post)
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                // Handle removed items if needed
+                            }
+                        }
+                    }
+                }
             }
-
 
 
     }
