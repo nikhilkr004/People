@@ -10,9 +10,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
-
-
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" /> <!-- maps -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +27,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.People"
         tools:targetApi="31">
+        <activity
+            android:name=".Maps.MapsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Maps.MapHomePageActivity"
+            android:exported="false" />
         <activity
             android:name=".VideoClass.VideoCallActivity"
             android:exported="false" />
@@ -88,6 +97,16 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDtnqpoZcNqLIeCKUa5N0qeWRVrIS67UsU" />
+
+        <service
+            android:name=".services.LocationService"
+            android:foregroundServiceType="location"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

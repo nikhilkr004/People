@@ -16,6 +16,7 @@ import com.example.people.Adapters.postAdapter
 import com.example.people.Chat.ChatHomeActivity
 import com.example.people.DataClass.PostItem
 import com.example.people.DataClass.Story
+import com.example.people.Maps.MapHomePageActivity
 import com.example.people.R
 import com.example.people.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -58,6 +59,9 @@ class HomeFragment : Fragment() {
             startActivity(Intent(requireContext(),ChatHomeActivity::class.java))
         }
 
+
+        ///
+        binding.imageView7.setOnClickListener { startActivity(Intent(requireContext(),MapHomePageActivity::class.java)) }
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
